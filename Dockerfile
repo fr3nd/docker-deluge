@@ -31,7 +31,7 @@ WORKDIR /usr/src/deluge
 RUN curl -L http://download.deluge-torrent.org/source/deluge-${DELUGE_VERSION}.tar.xz | \
     tar xvJ --strip-components=1 && \
     python setup.py build && \
-    python setup.py install && \
+    python setup.py install --install-layout=deb && \
     rm -rf /usr/src/deluge
 WORKDIR /
 
