@@ -1,7 +1,7 @@
 FROM debian:jessie
 MAINTAINER Carles Amigó, fr3nd@fr3nd.net
 
-ENV DELUGE_VERSION 1.3.13
+ENV DELUGE_VERSION 1.3.14
 
 RUN apt-get update && apt-get install -y \
       build-essential \
