@@ -6,6 +6,7 @@ ENV DELUGE_VERSION 1.3.15
 RUN apt-get update && apt-get install -y \
       build-essential \
       geoip-database \
+      git \
       intltool \
       librsvg2-common \
       python \
@@ -33,6 +34,17 @@ RUN curl -L http://download.deluge-torrent.org/source/deluge-${DELUGE_VERSION}.t
     python setup.py build && \
     python setup.py install --install-layout=deb && \
     rm -rf /usr/src/deluge
+
+ENV DELUGE_TELEGRAMER_REPO https://github.com/noam09/deluge-telegramer.git
+ENV DELUGE_TELEGRAMER_VERSION 46ed53b2979ff84f54f557689f13fdef8330d2ce
+RUN mkdir -p /usr/src/deluge-telegramer
+WORKDIR /usr/src/deluge-telegramer
+RUN git clone ${DELUGE_TELEGRAMER_REPO} . && \
+    git checkout ${DELUGE_TELEGRAMER_VERSION} && \
+    python setup.py bdist_egg && \
+    cp dist/Telegramer*.egg /usr/lib/python2.7/dist-packages/deluge-${DELUGE_VERSION}-py2.7.egg/deluge/plugins && \
+    rm -rf /usr/src/deluge-telegramer
+
 WORKDIR /
 
 COPY supervisord.conf /etc/supervisor/supervisord.conf
