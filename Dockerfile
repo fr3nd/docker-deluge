@@ -10,13 +10,13 @@ RUN apt-get update && apt-get install -y \
       intltool \
       librsvg2-common \
       python \
-      python-certifi \
       python-chardet \
       python-glade2 \
       python-libtorrent \
       python-mako \
       python-notify \
       python-openssl \
+      python-pip \
       python-pygame \
       python-setuptools \
       python-twisted \
@@ -42,6 +42,7 @@ RUN mkdir -p /usr/src/deluge-telegramer
 WORKDIR /usr/src/deluge-telegramer
 RUN git clone ${DELUGE_TELEGRAMER_REPO} . && \
     git checkout ${DELUGE_TELEGRAMER_VERSION} && \
+    pip install certifi==2018.8.24 && \
     python setup.py bdist_egg && \
     cp dist/Telegramer*.egg /usr/lib/python2.7/dist-packages/deluge-${DELUGE_VERSION}-py2.7.egg/deluge/plugins && \
     rm -rf /usr/src/deluge-telegramer
