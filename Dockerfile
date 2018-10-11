@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
       intltool \
       librsvg2-common \
       python \
+      python-certifi \
       python-chardet \
       python-glade2 \
       python-libtorrent \
