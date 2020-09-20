@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM ubuntu:bionic
 MAINTAINER Carles Amigó, fr3nd@fr3nd.net
 
 ENV DELUGE_VERSION 1.3.15
@@ -10,23 +10,19 @@ RUN apt-get update && apt-get install -y \
       intltool \
       librsvg2-common \
       python \
-      python-chardet \
-      python-glade2 \
-      python-libtorrent \
-      python-mako \
-      python-notify \
-      python-openssl \
+      python-dev \
       python-pip \
-      python-pygame \
-      python-setuptools \
-      python-twisted \
-      python-xdg \
+      python-libtorrent \
       supervisor \
+      libffi-dev \
       xdg-utils \
       && rm -rf /usr/share/doc/* && \
       rm -rf /usr/share/info/* && \
       rm -rf /tmp/* && \
       rm -rf /var/tmp/*
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt
 
 RUN mkdir -p /usr/src/deluge
 WORKDIR /usr/src/deluge
@@ -42,7 +38,6 @@ RUN mkdir -p /usr/src/deluge-telegramer
 WORKDIR /usr/src/deluge-telegramer
 RUN git clone ${DELUGE_TELEGRAMER_REPO} . && \
     git checkout ${DELUGE_TELEGRAMER_VERSION} && \
-    pip install certifi==2018.8.24 && \
     python setup.py bdist_egg && \
     cp dist/Telegramer*.egg /usr/lib/python2.7/dist-packages/deluge-${DELUGE_VERSION}-py2.7.egg/deluge/plugins && \
     rm -rf /usr/src/deluge-telegramer
