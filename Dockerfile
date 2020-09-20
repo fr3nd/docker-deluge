@@ -1,26 +1,26 @@
-FROM debian:jessie
+FROM ubuntu:20.04
 MAINTAINER Carles Amigó, fr3nd@fr3nd.net
 
-ENV DELUGE_VERSION 1.3.15
+ENV DELUGE_VERSION 2.0.3
+#ENV DELUGE_VERSION 2.0.3-2
 
-RUN apt-get update && apt-get install -y \
+      #deluge-web=$DELUGE_VERSION \
+      #deluge-console=$DELUGE_VERSION \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
       build-essential \
       geoip-database \
       git \
       intltool \
       librsvg2-common \
-      python \
-      python-chardet \
-      python-glade2 \
-      python-libtorrent \
-      python-mako \
-      python-notify \
-      python-openssl \
-      python-pip \
-      python-pygame \
-      python-setuptools \
-      python-twisted \
-      python-xdg \
+      python3 \
+      python3-chardet \
+      python3-libtorrent \
+      python3-mako \
+      python3-openssl \
+      python3-pip \
+      python3-setuptools \
+      python3-twisted \
+      python3-xdg \
       supervisor \
       xdg-utils \
       && rm -rf /usr/share/doc/* && \
@@ -30,20 +30,21 @@ RUN apt-get update && apt-get install -y \
 
 RUN mkdir -p /usr/src/deluge
 WORKDIR /usr/src/deluge
-RUN curl -L http://download.deluge-torrent.org/source/deluge-${DELUGE_VERSION}.tar.xz | \
+RUN curl -L http://download.deluge-torrent.org/source/2.0/deluge-${DELUGE_VERSION}.tar.xz | \
     tar xvJ --strip-components=1 && \
-    python setup.py build && \
-    python setup.py install --install-layout=deb && \
+    python3 setup.py build && \
+    python3 setup.py install --install-layout=deb && \
     rm -rf /usr/src/deluge
 
 ENV DELUGE_TELEGRAMER_REPO https://github.com/noam09/deluge-telegramer.git
-ENV DELUGE_TELEGRAMER_VERSION 46ed53b2979ff84f54f557689f13fdef8330d2ce
+ENV DELUGE_TELEGRAMER_VERSION v1.2
+
 RUN mkdir -p /usr/src/deluge-telegramer
 WORKDIR /usr/src/deluge-telegramer
 RUN git clone ${DELUGE_TELEGRAMER_REPO} . && \
     git checkout ${DELUGE_TELEGRAMER_VERSION} && \
     pip install certifi==2018.8.24 && \
-    python setup.py bdist_egg && \
+    python3 setup.py bdist_egg && \
     cp dist/Telegramer*.egg /usr/lib/python2.7/dist-packages/deluge-${DELUGE_VERSION}-py2.7.egg/deluge/plugins && \
     rm -rf /usr/src/deluge-telegramer
 
