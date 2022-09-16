@@ -1,6 +1,6 @@
 twisted[tls]==18.9.0
 chardet==3.0.4
-Mako==1.1.3
+Mako==1.2.2
 pyxdg==0.25
 pillow==6.2.2
 #slimit==0.8.1
